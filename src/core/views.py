@@ -27,6 +27,7 @@ db = firestore.client()
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def get_vaccine_data(request):
     result = db.collection('users').where('nik', "==", "{}".format(request.query_params.get('nik'))).stream()
+    data = []
     for doc in result:
         data = simplejson.dumps(doc.to_dict())
         return HttpResponse(data, content_type='application/json')
@@ -54,23 +55,51 @@ def photo_verification(request):
     data = simplejson.dumps(result)
     return HttpResponse(data, content_type='application/json')
 
-class TestView(APIView):
-    # def get(self, request, *args, **kwargs):
-    #     qs = Post.objects.all()
-    #     post = qs.first()
-    #     serializer = PostSerializer(post)
-    #     return Response(serializer.data)
 
-    def get(self, request, *args, **kwargs):
-        result = db.collection('users').where('nik', "==", "12731873618736918").stream()
-        for doc in result:
-            return Response(doc.to_dict())
+@api_view(('POST',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+def add_data_vaccine(request):
+    serializer = PostSerializer(data=request.data)
 
-    def post(self, request, *args, **kwargs):
-        serializer = PostSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        db.collection('users').add(serializer.data)
+        return HttpResponse(simplejson.dumps(serializer.data), content_type='application/json')
+    return HttpResponse(serializer.errors)
 
-        if serializer.is_valid():
-            serializer.save()
-            db.collection('users').add(serializer.data)
-            return Response(serializer.data)
-        return Response(serializer.errors)
+
+@api_view(('PUT',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+def update_vaccine_data(request):
+    serializer = PostSerializer(data=request.data)
+    result = db.collection('users').where('nik', "==", "{}".format(request.query_params.get('nik'))).stream()
+    if serializer.is_valid():
+        print("DATA : "+str(serializer.data))
+    for doc in result:
+        key = doc.id
+        db.collection('users').document(key).update(serializer.data)
+    data = simplejson.dumps(doc.to_dict())
+    return HttpResponse(data, content_type='application/json')
+
+
+@api_view(('DELETE',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+def delete_vaccine_data(request):
+    serializer = PostSerializer(data=request.data)
+    result = db.collection('users').where('nik', "==", "{}".format(request.query_params.get('nik'))).stream()
+    for doc in result:
+        key = doc.id
+        db.collection('users').document(key).delete()
+        return HttpResponse(status=200)
+
+
+@api_view(('GET',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+def verification_account_using_nik(request):
+    result = db.collection('users').where('nik', "==", "{}".format(request.query_params.get('nik'))).stream()
+    y_dict = { el.id: el.to_dict() for el in result }
+
+    if str(y_dict) == "{}":
+        return JsonResponse(status=404, data={'status':'false','message':'Data tidak ditemukan'})
+    else:
+        return JsonResponse(status=200, data={'status':'true','message':'Data ditemukan'})
