@@ -20,6 +20,9 @@ class Post(models.Model):
     firstVaccineDate = models.CharField(max_length=100, null=True)
     secondVaccineDate = models.CharField(max_length=100, null=True)
 
+    email = models.CharField(max_length=100, null=True)
+    barcode = models.CharField(max_length=100, null=True)
+
     def __str__(self):
         return self.title
 
