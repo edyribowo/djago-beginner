@@ -6,7 +6,7 @@ The first thing to do is to clone the repository:
 
 ```bash
 git clone https://github.com/edyribowo/djago-beginner.git
-cd djago-beginner
+cd djago-beginner/src
 ```
 Create a virtual environment to install dependencies in and activate it:
 ```bash
