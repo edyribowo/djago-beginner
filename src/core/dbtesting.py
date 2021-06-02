@@ -13,22 +13,22 @@ import tensorflow as tf
 from keras.preprocessing import image
 import numpy as np
 
- cred = credentials.Certificate("serviceAccountKey.json")
- firebase_admin.initialize_app(cred)
- db = firestore.client()
- config = {
-     "apiKey": "AIzaSyBCUiLMdRn3Urnec6BfC4f2UI19v3c8Vs4",
-     "authDomain": "vaccinekit-ffd28.firebaseapp.com",
-     "projectId": "vaccinekit-ffd28",
-     "storageBucket": "vaccinekit-ffd28.appspot.com",
-     "messagingSenderId": "548541796934",
-     "databaseURL":"",
-     "appId": "1:548541796934:web:326a0a8850ee565bf77047",
-     "measurementId": "G-4XHMZY181K"
- }
- db = firestore.client()
- firebase = pyrebase.initialize_app(config)
- firebase_storage = firebase.storage()
+# cred = credentials.Certificate("serviceAccountKey.json")
+# firebase_admin.initialize_app(cred)
+# db = firestore.client()
+# config = {
+#     "apiKey": "AIzaSyBCUiLMdRn3Urnec6BfC4f2UI19v3c8Vs4",
+#     "authDomain": "vaccinekit-ffd28.firebaseapp.com",
+#     "projectId": "vaccinekit-ffd28",
+#     "storageBucket": "vaccinekit-ffd28.appspot.com",
+#     "messagingSenderId": "548541796934",
+#     "databaseURL":"",
+#     "appId": "1:548541796934:web:326a0a8850ee565bf77047",
+#     "measurementId": "G-4XHMZY181K"
+# }
+# db = firestore.client()
+# firebase = pyrebase.initialize_app(config)
+# firebase_storage = firebase.storage()
 
 #
 # nameFile = "1234567890.jpeg"
